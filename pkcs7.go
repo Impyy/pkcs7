@@ -11,10 +11,10 @@ var (
 	minBlockSize = 1
 	maxBlockSize = 255
 
-	ErrEmpty      = errors.New("the given byte slice is empty")
-	ErrPadding    = errors.New("bad padding")
-	ErrFullBlocks = errors.New("input not full blocks")
-	ErrBlockSize  = fmt.Errorf("invalid blocksize (valid sizes: b >= %d && b <= %d)", minBlockSize, maxBlockSize)
+	ErrEmpty      = errors.New("pkcs7: the given byte slice is empty")
+	ErrPadding    = errors.New("pkcs7: bad padding")
+	ErrFullBlocks = errors.New("pkcs7: input not full blocks")
+	ErrBlockSize  = fmt.Errorf("pkcs7: invalid blocksize (valid sizes: b >= %d && b <= %d)", minBlockSize, maxBlockSize)
 )
 
 // Pad pads the given data according to the PKCS #7 standard. This function uses
