@@ -1,4 +1,4 @@
-# pkcs7
+# pkcs7 [![Build Status](https://travis-ci.org/Impyy/pkcs7.svg?branch=master)](https://travis-ci.org/Impyy/pkcs7)
 
 Package pkcs7 implements data padding as specified by the PKCS #7 standard. See
 also: https://tools.ietf.org/html/rfc5652#section-6.3.
