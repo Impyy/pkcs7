@@ -44,35 +44,35 @@ var (
 		{
 			// incorrect value; correct length
 			in:  []byte{0x19, 0xC9, 0x3, 0x3},
-			out: ErrPadding,
+			out: ErrBadPadding,
 		},
 		{
 			// correct value; length too long
 			in:  []byte{0x19, 0xC9, 0x2, 0x2, 0x2},
-			out: ErrFullBlocks,
+			out: ErrNotFullBlocks,
 		},
 		{
 			// correct value; length too small
 			in:  []byte{0x19, 0xC9, 0x2},
-			out: ErrFullBlocks,
+			out: ErrNotFullBlocks,
 		},
 		{
 			// correct last value; rest of values incorrect; correct length
 			in:  []byte{0x19, 0xC9, 0x3, 0x2},
-			out: ErrPadding,
+			out: ErrBadPadding,
 		},
 	}
 )
 
 func TestPad(t *testing.T) {
 	_, err := Pad(nil, 256)
-	if err != ErrBlockSize {
-		t.Errorf("expected: ErrBlockSize")
+	if err != ErrInvalidBlockSize {
+		t.Errorf("expected: ErrInvalidBlockSize")
 	}
 
 	_, err = Pad(nil, 0)
-	if err != ErrBlockSize {
-		t.Errorf("expected: ErrBlockSize")
+	if err != ErrInvalidBlockSize {
+		t.Errorf("expected: ErrInvalidBlockSize")
 	}
 
 	f := func(v vector) {
@@ -92,13 +92,13 @@ func TestPad(t *testing.T) {
 
 func TestUnpad(t *testing.T) {
 	_, err := Unpad(nil, 256)
-	if err != ErrBlockSize {
-		t.Errorf("expected: ErrBlockSize")
+	if err != ErrInvalidBlockSize {
+		t.Errorf("expected: ErrInvalidBlockSize")
 	}
 
 	_, err = Unpad(nil, 0)
-	if err != ErrBlockSize {
-		t.Errorf("expected: ErrBlockSize")
+	if err != ErrInvalidBlockSize {
+		t.Errorf("expected: ErrInvalidBlockSize")
 	}
 
 	for _, v := range vectors {

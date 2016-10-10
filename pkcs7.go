@@ -11,10 +11,10 @@ var (
 	minBlockSize = 1
 	maxBlockSize = 255
 
-	ErrEmpty      = errors.New("pkcs7: the given byte slice is empty")
-	ErrPadding    = errors.New("pkcs7: bad padding")
-	ErrFullBlocks = errors.New("pkcs7: input not full blocks")
-	ErrBlockSize  = fmt.Errorf("pkcs7: invalid blocksize (valid sizes: b >= %d && b <= %d)", minBlockSize, maxBlockSize)
+	ErrEmpty            = errors.New("pkcs7: the given byte slice is empty")
+	ErrBadPadding       = errors.New("pkcs7: bad padding")
+	ErrNotFullBlocks    = errors.New("pkcs7: input not full blocks")
+	ErrInvalidBlockSize = fmt.Errorf("pkcs7: invalid blocksize (valid sizes: b >= %d && b <= %d)", minBlockSize, maxBlockSize)
 )
 
 // Pad pads the given data according to the PKCS #7 standard. This function uses
@@ -50,16 +50,16 @@ func Unpad(data []byte, blockSize int) ([]byte, error) {
 	}
 
 	if dataLen%blockSize != 0 {
-		return nil, ErrFullBlocks
+		return nil, ErrNotFullBlocks
 	}
 
 	count := data[dataLen-1]
 	if int(count) > blockSize {
-		return nil, ErrPadding
+		return nil, ErrBadPadding
 	}
 
 	if int(count) > dataLen {
-		return nil, ErrPadding
+		return nil, ErrBadPadding
 	}
 
 	pos := dataLen - int(count)
@@ -67,7 +67,7 @@ func Unpad(data []byte, blockSize int) ([]byte, error) {
 
 	for _, b := range padding {
 		if b != count {
-			return nil, ErrPadding
+			return nil, ErrBadPadding
 		}
 	}
 
@@ -76,7 +76,7 @@ func Unpad(data []byte, blockSize int) ([]byte, error) {
 
 func checkBlockSize(blockSize int) (err error) {
 	if blockSize < minBlockSize || blockSize > maxBlockSize {
-		err = ErrBlockSize
+		err = ErrInvalidBlockSize
 	}
 	return
 }
